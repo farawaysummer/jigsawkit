@@ -18,14 +18,14 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
-public class Templates {
+public class EmrTemplates {
     private static final String BASE_TEMPLATE = "base.xml";
 
-    public static final Templates INSTANCE = new Templates(null);
+    public static final EmrTemplates INSTANCE = new EmrTemplates(null);
 
     private final String templatePath;
 
-    private Templates(String templatePath) {
+    private EmrTemplates(String templatePath) {
         if (templatePath != null && Files.isDirectory(Paths.get(templatePath))) {
             this.templatePath = Paths.get(templatePath).toAbsolutePath() + "/";
         } else {
@@ -33,8 +33,8 @@ public class Templates {
         }
     }
 
-    public static Templates templates(String basePath) {
-        return new Templates(basePath);
+    public static EmrTemplates templates(String basePath) {
+        return new EmrTemplates(basePath);
     }
 
     /**
@@ -43,13 +43,13 @@ public class Templates {
      * @param type
      * @return
      */
-    public Template newTemplate(String type) {
+    public EmrTemplate newTemplate(String type) {
         TemplateBuilder builder = new TemplateBuilder(type);
 
         return builder.build();
     }
 
-    public Template newTemplate(String type, InputStream... projectResource) throws Exception {
+    public EmrTemplate newTemplate(String type, InputStream... projectResource) throws Exception {
         TemplateBuilder builder = new TemplateBuilder(type);
 
         for (InputStream inputStream : projectResource) {
@@ -59,15 +59,15 @@ public class Templates {
         return builder.build();
     }
 
-    public Template[] newEvalTemplates(String type, InputStream... projectResource) throws Exception {
-        Template[] templates;
+    public EmrTemplate[] newEvalTemplates(String type, InputStream... projectResource) throws Exception {
+        EmrTemplate[] templates;
         if (projectResource.length == 0) {
-            templates = new Template[1];
+            templates = new EmrTemplate[1];
             templates[0] = newTemplate(type);
             return templates;
         }
 
-        templates = new Template[projectResource.length];
+        templates = new EmrTemplate[projectResource.length];
         for (int index = 0; index < projectResource.length; index++) {
             InputStream inputStream = projectResource[index];
             TemplateBuilder builder = new TemplateBuilder(type);
@@ -80,8 +80,8 @@ public class Templates {
 
     private class TemplateBuilder {
         private String name;
-        private final Map<String, Label> labelMap;
-        private final Map<String, Label> rootLabelMap;
+        private final Map<String, EmrLabel> labelMap;
+        private final Map<String, EmrLabel> rootLabelMap;
         private final Map<String, Extractor> extractorMap;
 
         TemplateBuilder() {
@@ -170,8 +170,8 @@ public class Templates {
             }
         }
 
-        public Template build() {
-            return new Template(name, labelMap, rootLabelMap, extractorMap);
+        public EmrTemplate build() {
+            return new EmrTemplate(name, labelMap, rootLabelMap, extractorMap);
         }
 
         private void parseExtractor(Element extractor) {
@@ -219,12 +219,12 @@ public class Templates {
 
         private void parseLabel(Element labelNode) {
             String labelName = labelNode.attributeValue("name");
-            Label label = labelMap.get(labelName);
+            EmrLabel label = labelMap.get(labelName);
             if (label == null) {
                 String type = labelNode.attributeValue("type");
                 String extractorName = labelNode.attributeValue("extractor");
                 String desc = labelNode.attributeValue("desc");
-                label = new Label(labelName);
+                label = new EmrLabel(labelName);
                 label.setDesc(desc);
 
                 label.setExtractor(extractorByType(type, extractorName));
@@ -259,7 +259,7 @@ public class Templates {
             List<Element> labels = constructNode.elements("label");
             for (Element label : labels) {
                 String labelName = label.attributeValue("name");
-                Label existLabel = labelMap.get(labelName);
+                EmrLabel existLabel = labelMap.get(labelName);
 
                 if (existLabel == null) {
                     continue;
@@ -276,11 +276,11 @@ public class Templates {
             }
         }
 
-        private void parseLabelConstruct(Element labelNode, Label parentLabel) {
+        private void parseLabelConstruct(Element labelNode, EmrLabel parentLabel) {
             List<Element> labels = labelNode.elements("label");
             for (Element label : labels) {
                 String labelName = label.attributeValue("name");
-                Label existLabel = labelMap.get(labelName);
+                EmrLabel existLabel = labelMap.get(labelName);
 
                 if (existLabel == null) {
                     continue;

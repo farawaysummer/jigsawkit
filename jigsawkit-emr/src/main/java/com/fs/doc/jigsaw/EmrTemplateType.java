@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 
 import java.util.Map;
 
-public enum TemplateType {
+public enum EmrTemplateType {
     HET_PATIENT("病历患者信息"),
     HET_BASIC("基本健康信息"),
     HET_EVENT("卫生事件摘要"),
@@ -58,7 +58,7 @@ public enum TemplateType {
 
     private final String templateName;
 
-    TemplateType(String templateName) {
+    EmrTemplateType(String templateName) {
         this.templateName = templateName;
     }
 
@@ -69,7 +69,7 @@ public enum TemplateType {
     public static Map<String, String> getNameMapping() {
         Map<String, String> mapping = Maps.newHashMap();
 
-        for (TemplateType type : TemplateType.values()) {
+        for (EmrTemplateType type : EmrTemplateType.values()) {
             mapping.put(type.getTemplateName(), type.name());
         }
 
@@ -77,11 +77,11 @@ public enum TemplateType {
     }
 
     public static String[] getTemplateNames() {
-        int size = TemplateType.values().length;
+        int size = EmrTemplateType.values().length;
         String[] templateNames = new String[size];
 
         for (int index = 0; index < size; index++) {
-            templateNames[index] = TemplateType.values()[index].templateName;
+            templateNames[index] = EmrTemplateType.values()[index].templateName;
         }
 
         return templateNames;

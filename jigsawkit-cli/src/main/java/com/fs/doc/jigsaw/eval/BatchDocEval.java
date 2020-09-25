@@ -1,12 +1,12 @@
 package com.fs.doc.jigsaw.eval;
 
-import com.fs.doc.jigsaw.Jigsaw;
+import com.fs.doc.jigsaw.EmrLabel;
+import com.fs.doc.jigsaw.EmrTemplate;
+import com.fs.doc.jigsaw.JigsawEmr;
 import com.fs.doc.jigsaw.JigsawResult;
-import com.fs.doc.jigsaw.Label;
-import com.fs.doc.jigsaw.Template;
 import com.fs.doc.jigsaw.extractor.ValueType;
-import com.fs.doc.jigsaw.trainer.DocumentAnalyzer;
-import com.fs.doc.jigsaw.trainer.TemplateTrainer;
+import com.fs.doc.jigsaw.trainer.EmrDocumentAnalyzer;
+import com.fs.doc.jigsaw.trainer.EmrTemplateTrainer;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -26,7 +26,7 @@ public class BatchDocEval {
     private String templatePath;
     private boolean onDebug = true;
 
-    private TemplateTrainer templateTrainer;
+    private EmrTemplateTrainer templateTrainer;
     private OutputFormat format;
 
     public BatchDocEval(String templateName) {
@@ -58,9 +58,9 @@ public class BatchDocEval {
     }
 
     void init() {
-        DocumentAnalyzer analyzer = new DocumentAnalyzer(new char[]{':', ' '});
+        EmrDocumentAnalyzer analyzer = new EmrDocumentAnalyzer(new char[]{':', ' '});
 
-        templateTrainer = new TemplateTrainer(analyzer, templatePath);
+        templateTrainer = new EmrTemplateTrainer(analyzer, templatePath);
 
         format = OutputFormat.createPrettyPrint();  //转换成字符串
         format.setEncoding("UTF-8");
@@ -108,14 +108,14 @@ public class BatchDocEval {
     }
 
     private void evalDoc(String docId, String docContent, String exportTo, FileWriter summaryWriter) throws Exception {
-        Template trained = templateTrainer.train(docContent, templateName, projectFiles);
+        EmrTemplate trained = templateTrainer.train(docContent, templateName, projectFiles);
 
         if (onDebug) {
             System.out.println("Parsing document " + docId + " .");
         }
 
-        Jigsaw jigsaw = new Jigsaw();
-        JigsawResult result = jigsaw.parseDocument(trained, docContent);
+        JigsawEmr jigsawEmr = new JigsawEmr();
+        JigsawResult result = jigsawEmr.parseDocument(trained, docContent);
         Map<String, String> values = result.getResultValues();
         Document document = DocumentHelper.createDocument();
         document.setXMLEncoding("UTF-8");
@@ -125,10 +125,10 @@ public class BatchDocEval {
 
         Element fieldsElement = rootElement.addElement("fields");
 
-        Map<String, Label> labelMap = trained.getLabelMap();
+        Map<String, EmrLabel> labelMap = trained.getLabelMap();
 
         for (Map.Entry<String, String> resultEntry : values.entrySet()) {
-            Label label = labelMap.get(resultEntry.getKey());
+            EmrLabel label = labelMap.get(resultEntry.getKey());
             if (label != null) {
                 Element fieldElement = fieldsElement.addElement(label.getName());
                 fieldElement.addAttribute("desc", label.getDesc());
@@ -138,7 +138,7 @@ public class BatchDocEval {
 
         if (onDebug) {
             int expectPartCount = 0;
-            for (Label label : trained.getLabelMap().values()) {
+            for (EmrLabel label : trained.getLabelMap().values()) {
                 if (label.getType() != ValueType.complex && label.getType() != ValueType.exclude) {
                     expectPartCount++;
                 }

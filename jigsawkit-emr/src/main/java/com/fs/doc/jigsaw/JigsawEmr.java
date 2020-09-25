@@ -8,9 +8,9 @@ import com.google.common.collect.*;
 
 import java.util.*;
 
-public class Jigsaw {
-    public JigsawResult parseDocument(Template template, String doc) {
-        Map<String, Label> labelMap = template.getRootLabelMap();
+public class JigsawEmr {
+    public JigsawResult parseDocument(EmrTemplate template, String doc) {
+        Map<String, EmrLabel> labelMap = template.getRootLabelMap();
         String preProcessed = preProcessDocument(doc);
 
         JigsawResult jigsawResult = new JigsawResult();
@@ -20,13 +20,13 @@ public class Jigsaw {
         return jigsawResult;
     }
 
-    private void parseDocumentParts(Map<String, Label> labelMap, String doc, JigsawResult result) {
+    private void parseDocumentParts(Map<String, EmrLabel> labelMap, String doc, JigsawResult result) {
         RangeMap<Integer, String> rangeMap = TreeRangeMap.create();
 
-        Map<String, Label> titleToLabel = Maps.newHashMap();
+        Map<String, EmrLabel> titleToLabel = Maps.newHashMap();
         List<String> allTitles = Lists.newArrayList();
-        for (Map.Entry<String, Label> entry : labelMap.entrySet()) {
-            Label label = entry.getValue();
+        for (Map.Entry<String, EmrLabel> entry : labelMap.entrySet()) {
+            EmrLabel label = entry.getValue();
             List<String> titles = label.getOptionalTitles();
             for (String title : titles) {
                 titleToLabel.put(title, label);
@@ -86,7 +86,7 @@ public class Jigsaw {
                 index = doc.indexOf(labelItem);
             }
 
-            Label label = titleToLabel.get(labelItem);
+            EmrLabel label = titleToLabel.get(labelItem);
             String labelName = label.getName();
 
             if (index == -2) {
@@ -228,11 +228,11 @@ public class Jigsaw {
         extractValues(labelMap, labelValues, result);
     }
 
-    private void extractValues(Map<String, Label> labelMap, Map<String, String> labelValues, JigsawResult result) {
+    private void extractValues(Map<String, EmrLabel> labelMap, Map<String, String> labelValues, JigsawResult result) {
 
         Map<String, String> extractMap = Maps.newHashMap(labelValues);
         for (Map.Entry<String, String> labelValue : extractMap.entrySet()) {
-            Label label = labelMap.get(labelValue.getKey());
+            EmrLabel label = labelMap.get(labelValue.getKey());
             ValueType type = label.getType();
 
             if (type == ValueType.complex || type == ValueType.combine) {

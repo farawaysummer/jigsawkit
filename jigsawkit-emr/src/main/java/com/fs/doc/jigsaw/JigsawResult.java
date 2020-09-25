@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class JigsawResult {
     private final Map<String, String> values;
-    private final Map<String, JigsawPart> parts;
+    private final Map<String, JigsawEmrPart> parts;
     private int docLength = 1;
     private int parsedLength = 0;
     private int expectPartCount = 0;
@@ -22,8 +22,8 @@ public class JigsawResult {
         this.docLength = length;
     }
 
-    public void addPart(String labelName, String title, Label label) {
-        JigsawPart part = new JigsawPart();
+    public void addPart(String labelName, String title, EmrLabel label) {
+        JigsawEmrPart part = new JigsawEmrPart();
         part.setTitle(title);
         part.setLabel(label);
 
@@ -35,7 +35,7 @@ public class JigsawResult {
     }
 
     public void setPartValue(String labelName, String value) {
-        JigsawPart part = parts.get(labelName);
+        JigsawEmrPart part = parts.get(labelName);
         if (part != null) {
             if (part.getLabel().getType() != ValueType.complex) {
                 parsedLength += value.length();

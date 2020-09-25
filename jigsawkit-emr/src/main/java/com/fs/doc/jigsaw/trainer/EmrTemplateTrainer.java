@@ -1,8 +1,8 @@
 package com.fs.doc.jigsaw.trainer;
 
-import com.fs.doc.jigsaw.Label;
-import com.fs.doc.jigsaw.Template;
-import com.fs.doc.jigsaw.Templates;
+import com.fs.doc.jigsaw.EmrLabel;
+import com.fs.doc.jigsaw.EmrTemplate;
+import com.fs.doc.jigsaw.EmrTemplates;
 import com.fs.doc.jigsaw.extractor.ValueType;
 import com.google.common.base.Strings;
 import com.google.common.cache.CacheBuilder;
@@ -13,24 +13,24 @@ import java.io.FileInputStream;
 import java.util.Map;
 import java.util.Objects;
 
-public class TemplateTrainer {
-    private final DocumentAnalyzer analyzer;
-    private final LoadingCache<CacheTemplateIndex, Map<String, Label>> labelMapCache;
-    private final Templates templates;
+public class EmrTemplateTrainer {
+    private final EmrDocumentAnalyzer analyzer;
+    private final LoadingCache<CacheTemplateIndex, Map<String, EmrLabel>> labelMapCache;
+    private final EmrTemplates templates;
 
-    public TemplateTrainer(final DocumentAnalyzer analyzer, final String templatePath) {
+    public EmrTemplateTrainer(final EmrDocumentAnalyzer analyzer, final String templatePath) {
         this.analyzer = analyzer;
         if (templatePath == null) {
-            templates = Templates.INSTANCE;
+            templates = EmrTemplates.INSTANCE;
         } else {
-            this.templates = Templates.templates(templatePath);
+            this.templates = EmrTemplates.templates(templatePath);
         }
 
         labelMapCache = CacheBuilder.newBuilder().build(
-                new CacheLoader<CacheTemplateIndex, Map<String, Label>>() {
+                new CacheLoader<CacheTemplateIndex, Map<String, EmrLabel>>() {
                     @Override
-                    public Map<String, Label> load(CacheTemplateIndex cacheIndex) throws Exception {
-                        Template template;
+                    public Map<String, EmrLabel> load(CacheTemplateIndex cacheIndex) throws Exception {
+                        EmrTemplate template;
                         if (Strings.isNullOrEmpty(cacheIndex.projectSource)) {
                             template = templates.newTemplate(cacheIndex.templateType);
                         } else {
@@ -44,15 +44,15 @@ public class TemplateTrainer {
         );
     }
 
-    public TemplateTrainer(final DocumentAnalyzer analyzer) {
+    public EmrTemplateTrainer(final EmrDocumentAnalyzer analyzer) {
         this.analyzer = analyzer;
-        templates = Templates.INSTANCE;
+        templates = EmrTemplates.INSTANCE;
 
         labelMapCache = CacheBuilder.newBuilder().build(
-                new CacheLoader<CacheTemplateIndex, Map<String, Label>>() {
+                new CacheLoader<CacheTemplateIndex, Map<String, EmrLabel>>() {
                     @Override
-                    public Map<String, Label> load(CacheTemplateIndex cacheIndex) throws Exception {
-                        Template template;
+                    public Map<String, EmrLabel> load(CacheTemplateIndex cacheIndex) throws Exception {
+                        EmrTemplate template;
                         if (Strings.isNullOrEmpty(cacheIndex.projectSource)) {
                             template = templates.newTemplate(cacheIndex.templateType);
                         } else {
@@ -66,12 +66,12 @@ public class TemplateTrainer {
         );
     }
 
-    public Template train(String doc, String docType, String... projectSources) throws Exception {
+    public EmrTemplate train(String doc, String docType, String... projectSources) throws Exception {
         String selectedSource = null;
-        Map<String, Label> fitLabelMaps = null;
+        Map<String, EmrLabel> fitLabelMaps = null;
         for (String projectSource : projectSources) {
-            Map<String, Label> labelMap = labelMapCache.get(new CacheTemplateIndex(docType, projectSource));
-            Map<String, Label> fitLabels = analyzer.analyze(doc, labelMap);
+            Map<String, EmrLabel> labelMap = labelMapCache.get(new CacheTemplateIndex(docType, projectSource));
+            Map<String, EmrLabel> fitLabels = analyzer.analyze(doc, labelMap);
 
             if (fitLabelMaps == null || fitLabelMaps.size() < fitLabels.size()) {
                 fitLabelMaps = fitLabels;
@@ -80,27 +80,27 @@ public class TemplateTrainer {
         }
 
         if (selectedSource == null || fitLabelMaps == null) {
-            Template template = templates.newTemplate(docType);
+            EmrTemplate template = templates.newTemplate(docType);
             return template.copyTemplate();
         }
 
         System.out.println(fitLabelMaps);
 
-        Template template = templates.newTemplate(docType, new FileInputStream(selectedSource));
-        Template toTrained = template.copyTemplate();
+        EmrTemplate template = templates.newTemplate(docType, new FileInputStream(selectedSource));
+        EmrTemplate toTrained = template.copyTemplate();
 
         doTrain(fitLabelMaps, toTrained);
 
         return toTrained;
     }
 
-    public Template train(String doc, String docType, String projectSource, Template lastTrained) throws Exception {
-        Map<String, Label> labelMap = labelMapCache.get(new CacheTemplateIndex(docType, projectSource));
-        Map<String, Label> fitLabels = analyzer.analyze(doc, labelMap);
+    public EmrTemplate train(String doc, String docType, String projectSource, EmrTemplate lastTrained) throws Exception {
+        Map<String, EmrLabel> labelMap = labelMapCache.get(new CacheTemplateIndex(docType, projectSource));
+        Map<String, EmrLabel> fitLabels = analyzer.analyze(doc, labelMap);
         System.out.println(fitLabels);
-        Template toTrained;
+        EmrTemplate toTrained;
         if (lastTrained == null) {
-            Template template = templates.newTemplate(docType, new FileInputStream(projectSource));
+            EmrTemplate template = templates.newTemplate(docType, new FileInputStream(projectSource));
             toTrained = template.copyTemplate();
         } else {
             toTrained = lastTrained;
@@ -111,12 +111,12 @@ public class TemplateTrainer {
         return toTrained;
     }
 
-    private void doTrain(Map<String, Label> fitLabels, Template toTrained) {
-        for (Map.Entry<String, Label> entry : fitLabels.entrySet()) {
-            Label label = entry.getValue();
+    private void doTrain(Map<String, EmrLabel> fitLabels, EmrTemplate toTrained) {
+        for (Map.Entry<String, EmrLabel> entry : fitLabels.entrySet()) {
+            EmrLabel label = entry.getValue();
             if (label == null) continue;
 
-            Label templateLabel = toTrained.getLabelMap().get(label.getName());
+            EmrLabel templateLabel = toTrained.getLabelMap().get(label.getName());
             if (templateLabel == null) {
                 System.err.println("Can't find label " + label.getName());
             } else {

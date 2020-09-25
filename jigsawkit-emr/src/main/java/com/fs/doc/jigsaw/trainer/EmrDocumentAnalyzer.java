@@ -1,7 +1,7 @@
 package com.fs.doc.jigsaw.trainer;
 
-import com.fs.doc.jigsaw.Label;
-import com.fs.doc.jigsaw.Template;
+import com.fs.doc.jigsaw.EmrLabel;
+import com.fs.doc.jigsaw.EmrTemplate;
 import com.fs.doc.jigsaw.extractor.ExtractorUtils;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Strings;
@@ -13,14 +13,14 @@ import org.javatuples.Pair;
 
 import java.util.*;
 
-public class DocumentAnalyzer {
+public class EmrDocumentAnalyzer {
     private final CharMatcher separatorMatcher;
 
-    public DocumentAnalyzer() {
+    public EmrDocumentAnalyzer() {
         this(new char[0]);
     }
 
-    public DocumentAnalyzer(char[] separators) {
+    public EmrDocumentAnalyzer(char[] separators) {
         if (separators.length == 0) {
             separatorMatcher = CharMatcher.is(':');
         } else {
@@ -32,7 +32,7 @@ public class DocumentAnalyzer {
         return separatorMatcher;
     }
 
-    public Map<String, Label> analyze(String content, Map<String, Label> labelMap) {
+    public Map<String, EmrLabel> analyze(String content, Map<String, EmrLabel> labelMap) {
         Set<String> titles = detectTitle(content, separatorMatcher);
         List<String> labelTitles = Lists.newArrayList(labelMap.keySet());
         Collections.sort(labelTitles, new Comparator<String>() {
@@ -78,16 +78,16 @@ public class DocumentAnalyzer {
         return adjusted;
     }
 
-    private Map<String, Label> doLabelMapping(Map<String, Label> labelMap, Set<String> titles, CharMatcher matcher) {
-        Map<String, Label> mapping = Maps.newHashMap();
-        Map<Label, Pair<String, Integer>> distances = Maps.newHashMap();
+    private Map<String, EmrLabel> doLabelMapping(Map<String, EmrLabel> labelMap, Set<String> titles, CharMatcher matcher) {
+        Map<String, EmrLabel> mapping = Maps.newHashMap();
+        Map<EmrLabel, Pair<String, Integer>> distances = Maps.newHashMap();
         for (String title : titles) {
-            Pair<String, Integer> selected = selectLabel(labelMap.keySet(), Template.normalizeTitle(title, matcher));
+            Pair<String, Integer> selected = selectLabel(labelMap.keySet(), EmrTemplate.normalizeTitle(title, matcher));
             if (selected == null) {
                 continue;
             }
 
-            Label label = labelMap.get(selected.getValue0());
+            EmrLabel label = labelMap.get(selected.getValue0());
             if (label != null) {
                 if (distances.containsKey(label)) {
                     Pair<String, Integer> oldMatched = distances.get(label);

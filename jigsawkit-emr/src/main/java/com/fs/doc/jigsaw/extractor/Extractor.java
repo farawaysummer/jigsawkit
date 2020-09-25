@@ -1,7 +1,7 @@
 package com.fs.doc.jigsaw.extractor;
 
+import com.fs.doc.jigsaw.EmrLabel;
 import com.fs.doc.jigsaw.JigsawResult;
-import com.fs.doc.jigsaw.Label;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -15,7 +15,7 @@ public abstract class Extractor {
     private final ValueType valueType;
 
 
-    public abstract void extractValue(Label label, String value, JigsawResult result);
+    public abstract void extractValue(EmrLabel label, String value, JigsawResult result);
 
     protected Extractor(ValueType type) {
         this.valueType = type;
@@ -64,7 +64,7 @@ public abstract class Extractor {
         }
 
         @Override
-        public void extractValue(Label label, String value, JigsawResult result) {
+        public void extractValue(EmrLabel label, String value, JigsawResult result) {
             String extractValue = ExtractorUtils.trimPunctuation(value);
             result.setPartValue(label.getName(), extractValue);
         }
@@ -81,7 +81,7 @@ public abstract class Extractor {
         }
 
         @Override
-        public void extractValue(Label label, String value, JigsawResult result) {
+        public void extractValue(EmrLabel label, String value, JigsawResult result) {
             String extractValue = ExtractorUtils.extractNumber(value);
             result.setPartValue(label.getName(), extractValue);
         }
@@ -98,7 +98,7 @@ public abstract class Extractor {
         }
 
         @Override
-        public void extractValue(Label label, String value, JigsawResult result) {
+        public void extractValue(EmrLabel label, String value, JigsawResult result) {
             String extractValue = ExtractorUtils.extractDate(value);
 
             result.setPartValue(label.getName(), extractValue);
@@ -113,7 +113,7 @@ public abstract class Extractor {
         }
 
         @Override
-        public void extractValue(Label label, String value, JigsawResult result) {
+        public void extractValue(EmrLabel label, String value, JigsawResult result) {
             result.setPartValue(label.getName(), value);
 
         }
@@ -141,7 +141,7 @@ public abstract class Extractor {
         }
 
         @Override
-        public void extractValue(Label label, String value, JigsawResult result) {
+        public void extractValue(EmrLabel label, String value, JigsawResult result) {
             String resultValue = combine;
             boolean hasValue = false;
             for (String field : fields) {
@@ -173,7 +173,7 @@ public abstract class Extractor {
         }
 
         @Override
-        public void extractValue(Label label, String value, JigsawResult result) {
+        public void extractValue(EmrLabel label, String value, JigsawResult result) {
             result.setPartValue(label.getName(), value);
 
             Matcher matcher = pattern.matcher(value);
@@ -199,7 +199,7 @@ public abstract class Extractor {
         }
 
         @Override
-        public void extractValue(Label label, String value, JigsawResult result) {
+        public void extractValue(EmrLabel label, String value, JigsawResult result) {
 
         }
     }
@@ -212,7 +212,7 @@ public abstract class Extractor {
         }
 
         @Override
-        public void extractValue(Label label, String value, JigsawResult result) {
+        public void extractValue(EmrLabel label, String value, JigsawResult result) {
 
         }
     }

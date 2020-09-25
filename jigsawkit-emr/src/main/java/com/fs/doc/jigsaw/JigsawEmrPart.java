@@ -1,9 +1,9 @@
 package com.fs.doc.jigsaw;
 
-public class JigsawPart {
+public class JigsawEmrPart {
     private String title;
     private String value;
-    private Label label;
+    private EmrLabel label;
 
     public String getTitle() {
         return title;
@@ -13,11 +13,11 @@ public class JigsawPart {
         this.title = title;
     }
 
-    public Label getLabel() {
+    public EmrLabel getLabel() {
         return label;
     }
 
-    public void setLabel(Label label) {
+    public void setLabel(EmrLabel label) {
         this.label = label;
     }
 

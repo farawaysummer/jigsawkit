@@ -1,12 +1,12 @@
 package com.fs.doc.jigsaw.eval;
 
-import com.fs.doc.jigsaw.Jigsaw;
+import com.fs.doc.jigsaw.EmrLabel;
+import com.fs.doc.jigsaw.EmrTemplate;
+import com.fs.doc.jigsaw.JigsawEmr;
 import com.fs.doc.jigsaw.JigsawResult;
-import com.fs.doc.jigsaw.Label;
-import com.fs.doc.jigsaw.Template;
 import com.fs.doc.jigsaw.extractor.ValueType;
-import com.fs.doc.jigsaw.trainer.DocumentAnalyzer;
-import com.fs.doc.jigsaw.trainer.TemplateTrainer;
+import com.fs.doc.jigsaw.trainer.EmrDocumentAnalyzer;
+import com.fs.doc.jigsaw.trainer.EmrTemplateTrainer;
 import com.google.common.io.Files;
 
 import java.io.File;
@@ -41,21 +41,21 @@ public class SingleDocEval {
     }
 
     void evalDoc(String docFile) throws Exception {
-        DocumentAnalyzer analyzer = new DocumentAnalyzer(new char[]{':', ' '});
+        EmrDocumentAnalyzer analyzer = new EmrDocumentAnalyzer(new char[]{':', ' '});
 
-        TemplateTrainer templateTrainer = new TemplateTrainer(analyzer, templatePath);
+        EmrTemplateTrainer templateTrainer = new EmrTemplateTrainer(analyzer, templatePath);
 
         System.out.println("Start to eval document from " + docFile);
         String docContent = Files.toString(new File(docFile), Charset.defaultCharset());
 
-        Template trained = templateTrainer.train(docContent, templateName, projectFiles);
+        EmrTemplate trained = templateTrainer.train(docContent, templateName, projectFiles);
 
-        Jigsaw jigsaw = new Jigsaw();
-        JigsawResult result = jigsaw.parseDocument(trained, docContent);
+        JigsawEmr jigsawEmr = new JigsawEmr();
+        JigsawResult result = jigsawEmr.parseDocument(trained, docContent);
         Map<String, String> values = result.getResultValues();
 
         int expectPartCount = 0;
-        for (Label label : trained.getLabelMap().values()) {
+        for (EmrLabel label : trained.getLabelMap().values()) {
             if (label.getType() != ValueType.complex && label.getType() != ValueType.exclude) {
                 expectPartCount++;
             }
@@ -73,11 +73,11 @@ public class SingleDocEval {
         System.out.println("==============================================================");
     }
 
-    public String formatValues(Template template, Map<String, String> results) {
-        Map<String, Label> labelMap = template.getLabelMap();
+    public String formatValues(EmrTemplate template, Map<String, String> results) {
+        Map<String, EmrLabel> labelMap = template.getLabelMap();
         StringBuilder formatValue = new StringBuilder("{\n");
         for (Map.Entry<String, String> resultEntry : results.entrySet()) {
-            Label label = labelMap.get(resultEntry.getKey());
+            EmrLabel label = labelMap.get(resultEntry.getKey());
             if (label != null) {
                 formatValue.append(String.format("\t\"%s\" : \"%s\", \n", label.getDesc(), resultEntry.getValue()));
             }

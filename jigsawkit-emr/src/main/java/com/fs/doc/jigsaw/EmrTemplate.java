@@ -11,34 +11,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Template {
+public class EmrTemplate {
     private final String templateName;
-    private final Map<String, Label> labelMap;
-    private final Map<String, Label> rootLabelMap;
+    private final Map<String, EmrLabel> labelMap;
+    private final Map<String, EmrLabel> rootLabelMap;
     private final Map<String, Extractor> extractorMap;
 
-    protected Template(String templateName,
-                       Map<String, Label> labelMap,
-                       Map<String, Label> rootLabelMap,
-                       Map<String, Extractor> extractorMap) {
+    protected EmrTemplate(String templateName,
+                          Map<String, EmrLabel> labelMap,
+                          Map<String, EmrLabel> rootLabelMap,
+                          Map<String, Extractor> extractorMap) {
         this.templateName = templateName;
         this.labelMap = labelMap;
         this.rootLabelMap = rootLabelMap;
         this.extractorMap = extractorMap;
     }
 
-    public Map<String, Label> getRootLabelMap() {
+    public Map<String, EmrLabel> getRootLabelMap() {
         return rootLabelMap;
     }
 
-    public Map<String, Label> getLabelMap() {
+    public Map<String, EmrLabel> getLabelMap() {
         return labelMap;
     }
 
-    public Map<String, Label> getNormalizedLabelMap(CharMatcher separatorMatcher) {
-        Collection<Label> labels = getLabelMap().values();
-        Map<String, Label> normalizedMap = Maps.newHashMap();
-        for (Label label : labels) {
+    public Map<String, EmrLabel> getNormalizedLabelMap(CharMatcher separatorMatcher) {
+        Collection<EmrLabel> labels = getLabelMap().values();
+        Map<String, EmrLabel> normalizedMap = Maps.newHashMap();
+        for (EmrLabel label : labels) {
             Set<String> labelTitles = Sets.newHashSet();
 
             for (String optionTitle : label.getOptionalTitles()) {
@@ -53,28 +53,28 @@ public class Template {
         return normalizedMap;
     }
 
-    public Template copyTemplate() {
-        Map<String, Label> copyRootLabel = Maps.newHashMap();
-        for (Map.Entry<String, Label> entry : rootLabelMap.entrySet()) {
+    public EmrTemplate copyTemplate() {
+        Map<String, EmrLabel> copyRootLabel = Maps.newHashMap();
+        for (Map.Entry<String, EmrLabel> entry : rootLabelMap.entrySet()) {
             copyRootLabel.put(entry.getKey(), entry.getValue().clone());
         }
 
         return constructCloneTemplate(copyRootLabel);
     }
 
-    private Template constructCloneTemplate(Map<String, Label> copyRootLabel) {
-        List<Label> nestLabels = Lists.newArrayList();
-        for (Label label : copyRootLabel.values()) {
+    private EmrTemplate constructCloneTemplate(Map<String, EmrLabel> copyRootLabel) {
+        List<EmrLabel> nestLabels = Lists.newArrayList();
+        for (EmrLabel label : copyRootLabel.values()) {
             label.getNestLabels(nestLabels);
             nestLabels.add(label);
         }
 
-        Map<String, Label> copyLabelMap = Maps.newHashMap();
-        for (Label label : nestLabels) {
+        Map<String, EmrLabel> copyLabelMap = Maps.newHashMap();
+        for (EmrLabel label : nestLabels) {
             copyLabelMap.put(label.getName(), label);
         }
 
-        return new Template(this.templateName, copyLabelMap, copyRootLabel, extractorMap);
+        return new EmrTemplate(this.templateName, copyLabelMap, copyRootLabel, extractorMap);
     }
 
     public String export() {

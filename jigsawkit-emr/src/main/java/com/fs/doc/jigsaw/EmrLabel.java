@@ -10,15 +10,15 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-public class Label {
+public class EmrLabel {
     protected String name;
     protected String desc;
     protected Extractor extractor;
 
     private final List<String> optionalTitles;
-    private final Map<String, Label> subLabels;
+    private final Map<String, EmrLabel> subLabels;
 
-    public Label(String name) {
+    public EmrLabel(String name) {
         this.name = name;
         optionalTitles = Lists.newArrayList();
         subLabels = Maps.newHashMap();
@@ -90,7 +90,7 @@ public class Label {
         return optionalTitles;
     }
 
-    public void addSubLabel(Label subLabel) {
+    public void addSubLabel(EmrLabel subLabel) {
         if (subLabel == null) {
             return;
         }
@@ -98,25 +98,25 @@ public class Label {
         this.subLabels.put(subLabel.getName(), subLabel);
     }
 
-    public Map<String, Label> getSubLabels() {
+    public Map<String, EmrLabel> getSubLabels() {
         return subLabels;
     }
 
-    public void getNestLabels(List<Label> labels) {
+    public void getNestLabels(List<EmrLabel> labels) {
         labels.addAll(subLabels.values());
-        for (Label label : subLabels.values()) {
+        for (EmrLabel label : subLabels.values()) {
             label.getNestLabels(labels);
         }
     }
 
-    public Label clone() {
-        Label label = new Label(this.name);
+    public EmrLabel clone() {
+        EmrLabel label = new EmrLabel(this.name);
         label.desc = this.desc;
         label.extractor = this.extractor;
 
         label.optionalTitles.addAll(this.optionalTitles);
 
-        for (Map.Entry<String, Label> entry : subLabels.entrySet()) {
+        for (Map.Entry<String, EmrLabel> entry : subLabels.entrySet()) {
             label.subLabels.put(entry.getKey(), entry.getValue().clone());
         }
 
