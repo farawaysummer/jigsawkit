@@ -1,4 +1,4 @@
-package com.fs.doc.jigsaw;
+package com.fs.doc.emr;
 
 import com.google.common.collect.Maps;
 

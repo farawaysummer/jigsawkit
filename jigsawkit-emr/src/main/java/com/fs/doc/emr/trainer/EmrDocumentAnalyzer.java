@@ -1,8 +1,8 @@
-package com.fs.doc.jigsaw.trainer;
+package com.fs.doc.emr.trainer;
 
-import com.fs.doc.jigsaw.EmrLabel;
-import com.fs.doc.jigsaw.EmrTemplate;
-import com.fs.doc.jigsaw.extractor.ExtractorUtils;
+import com.fs.doc.emr.EmrLabel;
+import com.fs.doc.emr.EmrTemplate;
+import com.fs.doc.emr.extractor.ExtractorUtils;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;

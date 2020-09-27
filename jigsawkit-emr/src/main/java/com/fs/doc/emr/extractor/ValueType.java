@@ -1,4 +1,4 @@
-package com.fs.doc.jigsaw.extractor;
+package com.fs.doc.emr.extractor;
 
 public enum ValueType {
     exclude,

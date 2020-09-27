@@ -1,4 +1,4 @@
-package com.fs.doc.jigsaw.extractor;
+package com.fs.doc.emr.extractor;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.collect.Maps;

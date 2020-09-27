@@ -1,7 +1,7 @@
-package com.fs.doc.jigsaw.extractor;
+package com.fs.doc.emr.extractor;
 
-import com.fs.doc.jigsaw.EmrLabel;
-import com.fs.doc.jigsaw.JigsawResult;
+import com.fs.doc.emr.EmrLabel;
+import com.fs.doc.emr.JigsawResult;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

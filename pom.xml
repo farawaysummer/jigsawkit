@@ -15,6 +15,7 @@
         <module>jigsawkit-emr</module>
         <module>jigsawkit-cda</module>
         <module>jigsawkit-cli</module>
+        <module>jigsawkit-exchange-service</module>
     </modules>
 
     <properties>
@@ -24,6 +25,7 @@
         <dom4j.version>2.1.0</dom4j.version>
         <javatuples.version>1.2</javatuples.version>
         <airline.version>0.8</airline.version>
+        <axiomversion>1.2.13</axiomversion>
     </properties>
 
     <dependencyManagement>
@@ -64,6 +66,24 @@
                 <groupId>io.airlift</groupId>
                 <artifactId>airline</artifactId>
                 <version>${airline.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.ws.commons.axiom</groupId>
+                <artifactId>axiom-api</artifactId>
+                <version>${axiomversion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.ws.commons.axiom</groupId>
+                <artifactId>axiom-impl</artifactId>
+                <version>${axiomversion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.ws.commons.axiom</groupId>
+                <artifactId>axiom-dom</artifactId>
+                <version>${axiomversion}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

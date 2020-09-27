@@ -1,4 +1,4 @@
-package com.fs.doc.jigsaw;
+package com.fs.doc.emr;
 
 public class JigsawEmrPart {
     private String title;

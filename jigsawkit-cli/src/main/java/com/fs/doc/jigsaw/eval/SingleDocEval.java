@@ -1,12 +1,12 @@
 package com.fs.doc.jigsaw.eval;
 
-import com.fs.doc.jigsaw.EmrLabel;
-import com.fs.doc.jigsaw.EmrTemplate;
-import com.fs.doc.jigsaw.JigsawEmr;
-import com.fs.doc.jigsaw.JigsawResult;
-import com.fs.doc.jigsaw.extractor.ValueType;
-import com.fs.doc.jigsaw.trainer.EmrDocumentAnalyzer;
-import com.fs.doc.jigsaw.trainer.EmrTemplateTrainer;
+import com.fs.doc.emr.EmrLabel;
+import com.fs.doc.emr.EmrTemplate;
+import com.fs.doc.emr.JigsawEmr;
+import com.fs.doc.emr.JigsawResult;
+import com.fs.doc.emr.extractor.ValueType;
+import com.fs.doc.emr.trainer.EmrDocumentAnalyzer;
+import com.fs.doc.emr.trainer.EmrTemplateTrainer;
 import com.google.common.io.Files;
 
 import java.io.File;

@@ -1,9 +1,9 @@
-package com.fs.doc.jigsaw.trainer;
+package com.fs.doc.emr.trainer;
 
-import com.fs.doc.jigsaw.EmrLabel;
-import com.fs.doc.jigsaw.EmrTemplate;
-import com.fs.doc.jigsaw.EmrTemplates;
-import com.fs.doc.jigsaw.extractor.ValueType;
+import com.fs.doc.emr.EmrLabel;
+import com.fs.doc.emr.EmrTemplate;
+import com.fs.doc.emr.EmrTemplates;
+import com.fs.doc.emr.extractor.ValueType;
 import com.google.common.base.Strings;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

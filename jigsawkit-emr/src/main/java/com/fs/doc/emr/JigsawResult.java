@@ -1,6 +1,6 @@
-package com.fs.doc.jigsaw;
+package com.fs.doc.emr;
 
-import com.fs.doc.jigsaw.extractor.ValueType;
+import com.fs.doc.emr.extractor.ValueType;
 import com.google.common.collect.Maps;
 
 import java.util.Map;
@@ -50,11 +50,6 @@ public class JigsawResult {
     }
 
     public Map<String, String> getResultValues() {
-//        Map<String, String> values = Maps.newHashMap();
-//
-//        for (Map.Entry<String, JigsawPart> entry : parts.entrySet()) {
-//            values.put(entry.getKey(), entry.getValue().getValue());
-//        }
 
         return values;
     }

@@ -1,8 +1,8 @@
-package com.fs.doc.jigsaw;
+package com.fs.doc.emr;
 
 
-import com.fs.doc.jigsaw.extractor.ExtractorUtils;
-import com.fs.doc.jigsaw.extractor.ValueType;
+import com.fs.doc.emr.extractor.ExtractorUtils;
+import com.fs.doc.emr.extractor.ValueType;
 import com.google.common.base.Strings;
 import com.google.common.collect.*;
 
